@@ -1,6 +1,6 @@
 // src/pages/AdminLogin.jsx
 import { useState } from "react";
-import "../styles/AdminLogin.css";
+import "../styles/Adminlogin.css";
 
 const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:8000";
 
