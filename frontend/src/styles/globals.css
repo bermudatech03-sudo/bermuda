@@ -1,0 +1,238 @@
+@import url('https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Cabinet+Grotesk:wght@400;500;600;700;800;900&display=swap');
+
+/* ─────────────────────────────────────────────
+   DESIGN TOKENS
+───────────────────────────────────────────── */
+:root {
+  --c-bg:          #08080a;
+  --c-bg-2:        #0d0d12;
+  --c-bg-3:        #121218;
+  --c-surface:     #16161e;
+  --c-surface-2:   #1c1c26;
+  --c-border:      rgba(255,255,255,0.07);
+  --c-border-2:    rgba(255,255,255,0.12);
+
+  --c-accent:      #a8ff57;
+  --c-accent-2:    #7deb2f;
+  --c-accent-3:    #5bc21a;
+  --c-accent-glow: rgba(168,255,87,0.25);
+  --c-accent-dim:  rgba(168,255,87,0.08);
+
+  /* Softer accent variants for text — non-interactive contexts */
+  --c-accent-soft:  #c8ffaa;   /* lighter lime, easier on eyes */
+  --c-accent-muted: #7aad52;   /* desaturated, for labels/headings */
+
+  --c-teal:        #2dffc3;
+  --c-teal-dim:    rgba(45,255,195,0.08);
+
+  --c-text:        #f0f0f5;
+  --c-text-2:      #9090a0;
+  --c-text-3:      #52525e;
+
+  --font-display:  'Clash Display', sans-serif;
+  --font-body:     'Cabinet Grotesk', sans-serif;
+
+  --px:            clamp(20px, 5vw, 80px);
+  --section-py:    clamp(80px, 10vw, 140px);
+  --nav-h:         68px;
+
+  --ease:          cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ── RESET ── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--c-bg);
+  color: var(--c-text);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+img    { max-width: 100%; display: block; }
+button { font-family: var(--font-body); cursor: pointer; }
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar       { width: 4px; }
+::-webkit-scrollbar-track { background: var(--c-bg); }
+::-webkit-scrollbar-thumb { background: var(--c-accent-3); border-radius: 2px; }
+
+/* ── KEYFRAMES ── */
+@keyframes pulse-dot {
+  0%,100% { opacity:1; transform:scale(1); }
+  50%      { opacity:0.5; transform:scale(0.8); }
+}
+@keyframes float-y {
+  0%,100% { transform:translateY(0); }
+  50%      { transform:translateY(-12px); }
+}
+@keyframes slide-up {
+  from { transform:translateY(40px); opacity:0; }
+  to   { transform:translateY(0); opacity:1; }
+}
+@keyframes slide-in-right {
+  from { transform:translateX(60px); opacity:0; }
+  to   { transform:translateX(0); opacity:1; }
+}
+@keyframes glow-pulse {
+  0%,100% { box-shadow:0 0 20px var(--c-accent-glow); }
+  50%      { box-shadow:0 0 60px var(--c-accent-glow), 0 0 120px rgba(168,255,87,.1); }
+}
+@keyframes marquee {
+  from { transform:translateX(0); }
+  to   { transform:translateX(-50%); }
+}
+
+/* ── LAYOUT ── */
+.section-inner-header {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 var(--px);
+  width: 100%;
+}
+.section-inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 var(--px);
+  width: 100%;
+}
+.section-inner-footer {
+  max-width: 1440px;
+  margin-top: 15px ;
+  
+  padding: 0 var(--px);
+  width: 100%;
+}
+
+/* ── LABEL PILL ── */
+.label-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--c-accent-dim);
+  border: 1px solid rgba(168,255,87,0.2);
+  border-radius: 100px;
+  padding: 6px 16px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--c-accent);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  flex-shrink: 0;
+  width: fit-content;
+}
+.label-pill .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--c-accent);
+  animation: pulse-dot 2s infinite;
+  flex-shrink: 0;
+}
+
+/* ── BUTTONS ── */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: var(--c-accent);
+  color: #08080a;
+  border: none;
+  border-radius: 12px;
+  padding: 14px 28px;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  transition: all 0.25s var(--ease);
+  box-shadow: 0 0 32px var(--c-accent-glow);
+  white-space: nowrap;
+  min-height: 52px;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn-primary:hover {
+  background: var(--c-accent-2);
+  box-shadow: 0 0 60px var(--c-accent-glow);
+  transform: translateY(-2px);
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: transparent;
+  color: var(--c-text);
+  border: 1px solid var(--c-border-2);
+  border-radius: 12px;
+  padding: 14px 28px;
+  font-size: 15px;
+  font-weight: 700;
+  transition: all 0.25s var(--ease);
+  white-space: nowrap;
+  min-height: 52px;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn-outline:hover {
+  border-color: var(--c-accent);
+  color: var(--c-accent);
+  background: var(--c-accent-dim);
+}
+
+/* ── SHARED SECTION TITLE ── */
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 6vw, 72px);
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: -2px;
+  color: var(--c-text);
+  margin-top: 16px;
+}
+
+.accent {
+  background: linear-gradient(135deg, var(--c-accent), var(--c-teal));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  :root {
+    --section-py: clamp(60px, 12vw, 100px);
+    --px: 20px;
+    --nav-h: 62px;
+  }
+  .btn-primary,
+  .btn-outline {
+    padding: 13px 22px;
+    font-size: 14px;
+    min-height: 48px;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --px: 16px;
+    --nav-h: 58px;
+  }
+  /* !! No width:100% on buttons here !!
+     Buttons must stay inline. Use justify-content:center
+     on the parent flex container instead.             */
+}
+
+@media (max-width: 600px) {
+  .btn-primary.navbar__cta {
+    padding: 6px 12px;
+    font-size: 12px;
+    min-height: 32px;
+    border-radius: 8px;
+  }
+}

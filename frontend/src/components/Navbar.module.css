@@ -1,0 +1,252 @@
+/* ══════════════════════════════════════════════
+   NAVBAR.CSS  —  matches Navbar.jsx class names
+   Classes used in JSX:
+     header.navbar  .navbar--scrolled  .navbar--open
+     .navbar__inner  (+ .section-inner for padding)
+     .navbar__logo   .navbar__logo-mark
+     .navbar__logo-text  .navbar__logo-name  .navbar__logo-sub
+     nav.navbar__links
+     button.navbar__link  .navbar__link--active
+     button.btn-primary.navbar__cta
+     button.navbar__hamburger  .navbar__hamburger--open
+       span span span
+     div.navbar__drawer  .navbar__drawer--open
+       nav.navbar__drawer-links
+         button.navbar__drawer-link  .navbar__drawer-link--active
+         button.btn-primary.navbar__drawer-cta
+══════════════════════════════════════════════ */
+
+/* ── Base nav ── */
+.navbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  transition: background 0.35s ease, border-color 0.35s ease, backdrop-filter 0.35s ease;
+}
+
+.navbar--scrolled,
+.navbar--open {
+  background: rgba(8, 8, 10, 0.95);
+  backdrop-filter: blur(22px) saturate(160%);
+  -webkit-backdrop-filter: blur(22px) saturate(160%);
+  border-bottom: 1px solid var(--c-border);
+}
+
+/* ── Inner row ── */
+.navbar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 68px;
+  gap: 12px;
+}
+
+/* ── Logo ── */
+.navbar__logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  text-decoration: none;
+}
+
+.navbar__logo-mark {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--c-accent), var(--c-accent-3));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 19px;
+  color: var(--c-bg);
+  box-shadow: 0 0 20px var(--c-accent-glow);
+  flex-shrink: 0;
+}
+
+.navbar__logo-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+  gap: 2px;
+}
+
+.navbar__logo-name {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--c-text);
+  letter-spacing: 1.5px;
+}
+
+.navbar__logo-sub {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--c-accent);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
+
+/* ── Desktop nav links ── */
+.navbar__links {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex: 1;
+  /* push links to centre, cta stays on right */
+  justify-content: center;
+}
+
+.navbar__link {
+  background: none;
+  border: none;
+  color: var(--c-text-2);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s;
+  -webkit-tap-highlight-color: transparent;
+  white-space: nowrap;
+}
+
+.navbar__link:hover {
+  color: var(--c-text);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.navbar__link--active { color: var(--c-accent); }
+
+/* ── Desktop CTA ── */
+.navbar__cta {
+  flex-shrink: 0;
+  padding: 9px 20px;
+  font-size: 13px;
+  min-height: 40px;
+  gap: 6px;
+}
+
+/* ── Hamburger ── */
+.navbar__hamburger {
+  display: none;             /* hidden on desktop */
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 42px;
+  height: 42px;
+  background: var(--c-surface);
+  border: 1px solid var(--c-border-2);
+  border-radius: 9px;
+  cursor: pointer;
+  flex-shrink: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.navbar__hamburger span {
+  display: block;
+  width: 18px;
+  height: 1.5px;
+  background: var(--c-text-2);
+  border-radius: 2px;
+  transition: transform 0.28s ease, opacity 0.2s, background 0.2s;
+  transform-origin: center;
+}
+
+.navbar__hamburger--open span:nth-child(1) {
+  transform: translateY(6.5px) rotate(45deg);
+  background: var(--c-accent);
+}
+.navbar__hamburger--open span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+.navbar__hamburger--open span:nth-child(3) {
+  transform: translateY(-6.5px) rotate(-45deg);
+  background: var(--c-accent);
+}
+
+/* ── Mobile drawer ── */
+.navbar__drawer {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+  background: rgba(8, 8, 10, 0.97);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  border-top: 1px solid transparent;
+}
+
+.navbar__drawer--open {
+  max-height: 100svh;
+  border-top-color: var(--c-border);
+}
+
+.navbar__drawer-links {
+  display: flex;
+  flex-direction: column;
+  padding: 6px 0 24px;
+}
+
+.navbar__drawer-link {
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--c-border);
+  color: var(--c-text-2);
+  font-family: var(--font-body);
+  font-size: 17px;
+  font-weight: 600;
+  padding: 16px var(--px);
+  text-align: left;
+  cursor: pointer;
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  transition: color 0.15s, background 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.navbar__drawer-link:hover,
+.navbar__drawer-link--active {
+  color: var(--c-accent);
+  background: var(--c-accent-dim);
+}
+
+.navbar__drawer-cta {
+  margin: 20px var(--px) 0;
+  width: calc(100% - var(--px) * 2);
+  justify-content: center;
+  font-size: 15px;
+}
+
+/* ══ BREAKPOINTS ══ */
+
+/* ≤ 900px — switch to hamburger */
+@media (max-width: 900px) {
+  .navbar__links     { display: none; }
+  .navbar__cta       { display: none; }
+  .navbar__hamburger { display: flex; }
+  .navbar__inner     { height: 62px; gap: 10px; }
+}
+
+/* ≤ 600px */
+@media (max-width: 600px) {
+  .navbar__inner { height: 58px; }
+}
+
+/* ≤ 380px — hide logo text if very cramped */
+@media (max-width: 380px) {
+  .navbar__logo-name { display: none; }
+  .navbar__logo-sub  { display: none; }
+}

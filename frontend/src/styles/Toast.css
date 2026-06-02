@@ -1,0 +1,27 @@
+
+/* ══ TOAST.CSS ══ */
+.toast-container {
+  position:fixed; top:20px; right:20px; z-index:9999;
+  display:flex; flex-direction:column; gap:10px;
+  max-width:calc(100vw - 40px); pointer-events:none;
+}
+.toast {
+  display:flex; align-items:center; gap:12px;
+  padding:14px 20px; border-radius:12px;
+  font-size:14px; font-weight:700;
+  cursor:pointer; pointer-events:all;
+  box-shadow:0 8px 32px rgba(0,0,0,.5);
+  animation:slide-in-right 0.35s var(--ease) both;
+  border:1px solid transparent;
+  font-family:var(--font-body);
+  max-width:400px;
+}
+.toast--success { background:rgba(168,255,87,.12); color:var(--c-accent); border-color:rgba(168,255,87,.25); }
+.toast--error   { background:rgba(255,80,80,.12);  color:#ff5050;         border-color:rgba(255,80,80,.25); }
+.toast__icon {
+  width:22px; height:22px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:12px; font-weight:900; flex-shrink:0;
+}
+.toast--success .toast__icon { background:var(--c-accent); color:var(--c-bg); }
+.toast--error   .toast__icon { background:#ff5050; color:#fff; }

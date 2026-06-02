@@ -1,0 +1,263 @@
+/* ══════════════════════════════════════
+   NAVBAR.CSS
+   Matches Navbar.jsx BEM class names exactly.
+══════════════════════════════════════ */
+
+.navbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  transition: background 0.35s ease, backdrop-filter 0.35s ease, border-color 0.35s ease;
+}
+
+/* Background: apply on BOTH scrolled AND when menu is open */
+.navbar--scrolled {
+  background: rgba(8, 8, 10, 0.94);
+  backdrop-filter: blur(22px) saturate(160%);
+  -webkit-backdrop-filter: blur(22px) saturate(160%);
+  border-bottom: 1px solid rgba(168, 255, 87, 0.07);
+}
+
+/* When menu open: always solid so links are readable */
+.navbar--open {
+  background: rgba(8, 8, 10, 0.98);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  border-bottom: 1px solid rgba(168, 255, 87, 0.07);
+}
+
+/* ── Inner bar ── */
+.navbar__inner {
+  display: flex;
+  align-items: center;
+  height: var(--nav-h);
+  gap: 0;
+  /* No justify-content here — we use flex children to control spacing */
+}
+
+/* ── Logo (left, no flex-grow) ── */
+.navbar__logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  margin-right: auto; /* pushes everything else right — overridden when links visible */
+}
+
+.navbar__logo-mark {
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, var(--c-accent), var(--c-accent-3));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--c-bg);
+  box-shadow: 0 0 18px rgba(168,255,87,0.3);
+  flex-shrink: 0;
+}
+
+.navbar__logo-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+  gap: 1px;
+}
+
+.navbar__logo-name {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--c-text);
+  letter-spacing: 1.5px;
+}
+
+.navbar__logo-sub {
+  font-size: 8px;
+  font-weight: 700;
+  color: var(--c-accent-muted);   /* softer than raw accent */
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin-top: 1px;
+}
+
+/* ── Desktop nav links — centred between logo and CTA ── */
+.navbar__links {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex: 1;                       /* takes up available space */
+  justify-content: center;       /* centres the link buttons */
+  margin: 0 16px;
+}
+
+.navbar__link {
+  background: none;
+  border: none;
+  color: var(--c-text-2);
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  padding: 7px 13px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s;
+  -webkit-tap-highlight-color: transparent;
+  white-space: nowrap;
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+}
+
+.navbar__link:hover {
+  color: var(--c-text);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Active: softer lime so it doesn't scream */
+.navbar__link--active {
+  color: var(--c-accent-soft);
+}
+
+/* ── Desktop CTA (right, flex-shrink:0) ── */
+.navbar__cta {
+  flex-shrink: 0;
+  padding: 9px 20px;
+  font-size: 13px;
+  min-height: 40px;
+  /* Remove the logo margin-right override: logo uses margin-right:auto
+     only when links are hidden. When links are visible, the flex:1 on
+     .navbar__links handles centring.                                    */
+}
+
+/* ── Hamburger — hidden on desktop ── */
+.navbar__hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  background: var(--c-surface);
+  border: 1px solid var(--c-border-2);
+  border-radius: 9px;
+  cursor: pointer;
+  flex-shrink: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  margin-left: auto;   /* push to right when links hidden */
+}
+
+.navbar__hamburger span {
+  display: block;
+  width: 17px;
+  height: 1.5px;
+  background: var(--c-text-2);   /* softer than full-blast lime */
+  border-radius: 2px;
+  transition: transform 0.28s ease, opacity 0.2s, background 0.2s;
+  transform-origin: center;
+}
+
+/* Animated state — bars turn accent on open */
+.navbar__hamburger--open span:nth-child(1) {
+  transform: translateY(6.5px) rotate(45deg);
+  background: var(--c-accent);
+}
+.navbar__hamburger--open span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+.navbar__hamburger--open span:nth-child(3) {
+  transform: translateY(-6.5px) rotate(-45deg);
+  background: var(--c-accent);
+}
+
+/* ── Mobile drawer ── */
+.navbar__drawer {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+  background: #09090c;           /* solid dark — no see-through */
+  border-top: 1px solid transparent;
+}
+
+.navbar__drawer--open {
+  max-height: 100svh;
+  border-top-color: rgba(168, 255, 87, 0.07);
+}
+
+.navbar__drawer-links {
+  display: flex;
+  flex-direction: column;
+  padding: 4px 0 20px;
+}
+
+.navbar__drawer-link {
+  background: none;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  color: var(--c-text-2);
+  font-family: var(--font-body);
+  font-size: 17px;
+  font-weight: 600;
+  padding: 15px var(--px);
+  text-align: left;
+  cursor: pointer;
+  min-height: 54px;
+  display: flex;
+  align-items: center;
+  transition: color 0.15s, background 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.navbar__drawer-link:hover {
+  color: var(--c-accent-soft);
+  background: rgba(168, 255, 87, 0.04);
+}
+
+.navbar__drawer-link--active {
+  color: var(--c-accent-soft);
+}
+
+/* CTA inside drawer — full width minus padding */
+.navbar__drawer-cta {
+
+  margin: 18px var(--px) 0;
+  box-sizing: border-box;
+  width: calc(100% - 2 * var(--px));
+  justify-content: center;
+  font-size: 15px;
+  min-height: 50px;
+}
+
+/* ══ BREAKPOINTS ══ */
+
+/* ≤ 900px: hide links + CTA, show hamburger */
+@media (max-width: 900px) {
+  .navbar__links     { display: none; }
+  .navbar__cta       { display: none; }
+  .navbar__hamburger { display: flex; }
+  .navbar__logo      { margin-right: 0; } /* hamburger's margin-left:auto handles right-align */
+  .navbar__inner     { gap: 0; }
+}
+
+/* ≤ 480px */
+@media (max-width: 480px) {
+  .navbar__logo-name { font-size: 14px; letter-spacing: 1px; }
+}
+
+/* ≤ 360px: hide logo text to avoid collision with hamburger */
+@media (max-width: 360px) {
+  .navbar__logo-name,
+  .navbar__logo-sub { display: none; }
+}
