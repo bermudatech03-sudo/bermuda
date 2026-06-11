@@ -56,7 +56,6 @@ export default function Contact({ setPage, addToast, preselectedProduct }) {
   const [loading, setLoading] = useState(false);
   const [sent,    setSent]    = useState(false);
 
-  // If preselectedProduct changes (navigated from a different card), sync form
   useEffect(() => {
     if (preselectedProduct) {
       setForm(p => ({
@@ -72,13 +71,11 @@ export default function Contact({ setPage, addToast, preselectedProduct }) {
   const set = (k, v) => {
     setForm(p => {
       const next = { ...p, [k]: v };
-      // When service changes to Ready Product, auto-fill budget + timeline
       if (k === "service") {
         if (v === "Ready Product") {
           next.budget   = "Product Price";
           next.timeline = "Less than a week";
         } else {
-          // Clear auto-filled values if they switch away
           if (p.budget   === "Product Price")    next.budget   = "";
           if (p.timeline === "Less than a week") next.timeline = "";
           next.selected_product = "";
@@ -111,9 +108,9 @@ export default function Contact({ setPage, addToast, preselectedProduct }) {
   const isReady = form.service === "Ready Product";
 
   if (sent) return (
-    <div className="contact-success">
+    <div className="contact-success" role="status" aria-live="polite">
       <div className="contact-success__card">
-        <div className="contact-success__icon">✓</div>
+        <div className="contact-success__icon" aria-hidden="true">✓</div>
         <h2 className="contact-success__title">MESSAGE RECEIVED.</h2>
         <p className="contact-success__desc">
           Your message is with our team. Expect a response within{" "}
@@ -128,14 +125,14 @@ export default function Contact({ setPage, addToast, preselectedProduct }) {
 
   return (
     <div className="contact-page">
-      <section className="contact-hero">
-        <div className="contact-hero__glow" />
+      <section className="contact-hero" aria-labelledby="contact-heading">
+        <div className="contact-hero__glow" aria-hidden="true" />
         <div className="section-inner contact-hero__inner">
 
           {/* Left info column */}
           <div className="contact-hero__left">
-            <div className="label-pill"><span className="dot" />Get in Touch</div>
-            <h1 className="contact-hero__title">
+            <div className="label-pill"><span className="dot" aria-hidden="true" />Get in Touch</div>
+            <h1 id="contact-heading" className="contact-hero__title">
               LET'S BUILD<br />
               <span className="accent">SOMETHING</span><br />
               GREAT.
@@ -144,15 +141,15 @@ export default function Contact({ setPage, addToast, preselectedProduct }) {
               Every great product starts with a conversation. Tell us what you're building
               and we'll show you how we make it exceptional.
             </p>
-            <div className="contact-info">
+            <address className="contact-info" aria-label="Contact information">
               {[
-                { icon: "📞", l: "Phone",    v: "+91 97907 28732 - Vishva Sen B",         href: "tel:+919790728732" },
-                { icon: "📧", l: "Email",    v: "bermudatech03@gmail.com", href: "mailto:bermudatech03@gmail.com" },
-                { icon: "📍", l: "Office",   v: "B3 - Gp homes blazing star , visalakshi nagar , vanagaram , Chennai , Tamil Nadu ,India - 600095" },
+                { icon: "📞", l: "Phone",    v: "+91 97907 28732 - Vishva Sen B", href: "tel:+919790728732" },
+                { icon: "📧", l: "Email",    v: "bermudatech03@gmail.com",         href: "mailto:bermudatech03@gmail.com" },
+                { icon: "📍", l: "Office",   v: "NO 114/75 KOTHAVAL CHAVADI STREET WEST SAIDAPET ,Saidapet Chennai Tamil Nadu 600015" },
                 { icon: "⏰", l: "Response", v: "Within 4 business hours" },
               ].map((c, i) => (
                 <div key={i} className="contact-info__item">
-                  <div className="contact-info__icon">{c.icon}</div>
+                  <div className="contact-info__icon" aria-hidden="true">{c.icon}</div>
                   <div>
                     <div className="contact-info__label">{c.l}</div>
                     {c.href
@@ -162,32 +159,43 @@ export default function Contact({ setPage, addToast, preselectedProduct }) {
                   </div>
                 </div>
               ))}
-            </div>
+            </address>
           </div>
 
           {/* Right form column */}
           <div className="contact-form-wrap">
-            <div className="contact-form">
-              <h3 className="contact-form__title">
+            <form
+              className="contact-form"
+              onSubmit={e => { e.preventDefault(); handleSubmit(); }}
+              noValidate
+              aria-label={isReady ? "Request a ready product" : "Tell us about your project"}
+            >
+              <h2 className="contact-form__title">
                 {isReady ? "Request This Product" : "Tell Us About Your Project"}
-              </h3>
+              </h2>
 
               {/* Name / Email / Phone / Company */}
               <div className="contact-form__grid">
                 {[
-                  { l: "Full Name *",     k: "name",    t: "text",  ph: "John Smith" },
-                  { l: "Email Address *", k: "email",   t: "email", ph: "john@company.com" },
-                  { l: "Phone Number *",  k: "phone",   t: "tel",   ph: "+91 98765 43210" },
-                  { l: "Company Name",    k: "company", t: "text",  ph: "Your company" },
+                  { l: "Full Name",     k: "name",    t: "text",  ph: "John Smith",         id: "cf-name",    ac: "name",         req: true  },
+                  { l: "Email Address", k: "email",   t: "email", ph: "john@company.com",   id: "cf-email",   ac: "email",        req: true  },
+                  { l: "Phone Number",  k: "phone",   t: "tel",   ph: "+91 98765 43210",    id: "cf-phone",   ac: "tel",          req: true  },
+                  { l: "Company Name",  k: "company", t: "text",  ph: "Your company",       id: "cf-company", ac: "organization", req: false },
                 ].map(f => (
                   <div key={f.k} className="contact-form__field">
-                    <label className="contact-form__label">{f.l}</label>
+                    <label className="contact-form__label" htmlFor={f.id}>
+                      {f.l}{f.req && <span aria-hidden="true"> *</span>}
+                    </label>
                     <input
+                      id={f.id}
+                      name={f.k}
                       type={f.t}
                       value={form[f.k]}
                       onChange={e => set(f.k, e.target.value)}
                       placeholder={f.ph}
                       className="contact-form__input"
+                      autoComplete={f.ac}
+                      aria-required={f.req}
                     />
                   </div>
                 ))}
@@ -196,11 +204,14 @@ export default function Contact({ setPage, addToast, preselectedProduct }) {
               {/* Service / Budget / Timeline */}
               <div className="contact-form__grid contact-form__grid--3">
                 <div className="contact-form__field">
-                  <label className="contact-form__label">Service Needed</label>
+                  <label className="contact-form__label" htmlFor="cf-service">Service Needed</label>
                   <select
+                    id="cf-service"
+                    name="service"
                     value={form.service}
                     onChange={e => set("service", e.target.value)}
                     className="contact-form__input contact-form__select"
+                    autoComplete="off"
                   >
                     <option value="">Select…</option>
                     {SERVICES.map(s => (
@@ -210,16 +221,21 @@ export default function Contact({ setPage, addToast, preselectedProduct }) {
                 </div>
 
                 <div className="contact-form__field">
-                  <label className="contact-form__label">Budget Range</label>
+                  <label className="contact-form__label" htmlFor="cf-budget">Budget Range</label>
                   {isReady ? (
                     <input
+                      id="cf-budget"
+                      name="budget"
                       type="text"
                       value="Product Price"
                       readOnly
                       className="contact-form__input contact-form__input--readonly"
+                      aria-readonly="true"
                     />
                   ) : (
                     <select
+                      id="cf-budget"
+                      name="budget"
                       value={form.budget}
                       onChange={e => set("budget", e.target.value)}
                       className="contact-form__input contact-form__select"
@@ -233,16 +249,21 @@ export default function Contact({ setPage, addToast, preselectedProduct }) {
                 </div>
 
                 <div className="contact-form__field">
-                  <label className="contact-form__label">Timeline</label>
+                  <label className="contact-form__label" htmlFor="cf-timeline">Timeline</label>
                   {isReady ? (
                     <input
+                      id="cf-timeline"
+                      name="timeline"
                       type="text"
                       value="Less than a week"
                       readOnly
                       className="contact-form__input contact-form__input--readonly"
+                      aria-readonly="true"
                     />
                   ) : (
                     <select
+                      id="cf-timeline"
+                      name="timeline"
                       value={form.timeline}
                       onChange={e => set("timeline", e.target.value)}
                       className="contact-form__input contact-form__select"
@@ -259,11 +280,16 @@ export default function Contact({ setPage, addToast, preselectedProduct }) {
               {/* Product selector — only shown when Ready Product */}
               {isReady && (
                 <div className="contact-form__field contact-form__field--product">
-                  <label className="contact-form__label">Select Product *</label>
+                  <label className="contact-form__label" htmlFor="cf-product">
+                    Select Product<span aria-hidden="true"> *</span>
+                  </label>
                   <select
+                    id="cf-product"
+                    name="selected_product"
                     value={form.selected_product}
                     onChange={e => set("selected_product", e.target.value)}
                     className="contact-form__input contact-form__select contact-form__select--product"
+                    aria-required="true"
                   >
                     <option value="">Choose a product…</option>
                     {PRODUCTS.map(p => (
@@ -275,8 +301,12 @@ export default function Contact({ setPage, addToast, preselectedProduct }) {
 
               {/* Message */}
               <div className="contact-form__field">
-                <label className="contact-form__label">Project Description *</label>
+                <label className="contact-form__label" htmlFor="cf-message">
+                  Project Description<span aria-hidden="true"> *</span>
+                </label>
                 <textarea
+                  id="cf-message"
+                  name="message"
                   value={form.message}
                   onChange={e => set("message", e.target.value)}
                   placeholder={
@@ -286,20 +316,22 @@ export default function Contact({ setPage, addToast, preselectedProduct }) {
                   }
                   className="contact-form__input contact-form__textarea"
                   rows={5}
+                  aria-required="true"
                 />
               </div>
 
               <button
+                type="submit"
                 className={`btn-primary contact-form__submit ${loading ? "contact-form__submit--loading" : ""}`}
-                onClick={handleSubmit}
                 disabled={loading}
+                aria-busy={loading}
               >
                 {loading ? "Sending…" : isReady ? "Request Product →" : "Send Message →"}
               </button>
               <p className="contact-form__note">
                 Your details are kept confidential. We'll never share your information.
               </p>
-            </div>
+            </form>
           </div>
 
         </div>

@@ -13,22 +13,28 @@ function PortfolioCard({ p, setPage, i, vis, onRequestProduct }) {
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
       onClick={() => setPage("project:" + p.id)}
+      aria-label={`${p.title} — ${p.tagline}. Click to view full case study.`}
+      tabIndex={0}
+      onKeyDown={e => e.key === "Enter" && setPage("project:" + p.id)}
     >
       <div className="pcard__img-wrap">
-        <img src={p.thumb} alt={p.title} className="pcard__img" loading="lazy" />
-        <div className="pcard__overlay" />
+        <img src={p.thumb} alt={`${p.title} project screenshot`} className="pcard__img" loading="lazy" />
+        <div className="pcard__overlay" aria-hidden="true" />
         <div className="pcard__meta">
-          <span className="pcard__cat" style={{ color: p.color, background: p.colorDim, borderColor: p.colorBorder }}>{p.category}</span>
+          <span
+            className="pcard__cat"
+            style={{ color: p.color, background: p.colorDim, borderColor: p.colorBorder }}
+          >{p.category}</span>
           <span className="pcard__year">{p.year}</span>
         </div>
-        <div className="pcard__hover-reveal">
+        <div className="pcard__hover-reveal" aria-hidden="true">
           <span className="pcard__hover-cta">View Full Case Study →</span>
           <span className="pcard__hover-chapters">{p.pages.length} chapters inside</span>
         </div>
       </div>
       <div className="pcard__body">
         <div className="pcard__header">
-          <div className="pcard__icon-wrap" style={{ color: p.color, background: p.colorDim }}>
+          <div className="pcard__icon-wrap" style={{ color: p.color, background: p.colorDim }} aria-hidden="true">
             {p.icon}
           </div>
           <div>
@@ -37,26 +43,26 @@ function PortfolioCard({ p, setPage, i, vis, onRequestProduct }) {
           </div>
         </div>
         <p className="pcard__desc">{p.description}</p>
-        <div className="pcard__metrics">
+        <dl className="pcard__metrics">
           {p.metrics.map((m, j) => (
             <div key={j} className="pcard__metric">
-              <span className="pcard__metric-val" style={{ color: p.color }}>{m.val}</span>
-              <span className="pcard__metric-lbl">{m.label}</span>
+              <dt className="pcard__metric-lbl">{m.label}</dt>
+              <dd className="pcard__metric-val" style={{ color: p.color }}>{m.val}</dd>
             </div>
           ))}
-        </div>
+        </dl>
         <div className="pcard__footer">
-          <div className="pcard__tech">
+          <div className="pcard__tech" aria-label="Technologies used">
             {p.tech.map(t => <span key={t} className="pcard__pill">{t}</span>)}
           </div>
-          {/* Request Product button */}
           <button
             className="pcard__request-btn"
             style={{ "--c": p.color, "--cd": p.colorDim, "--cb": p.colorBorder }}
             onClick={e => {
-              e.stopPropagation(); // don't navigate to project detail
+              e.stopPropagation();
               onRequestProduct(p.id);
             }}
+            aria-label={`Request ${p.title} product`}
           >
             Request This Product →
           </button>
@@ -86,13 +92,13 @@ export default function Portfolio({ setPage, onRequestProduct }) {
   return (
     <div className="portfolio-page">
       {/* Header */}
-      <section className="portfolio-hero">
-        <div className="portfolio-hero__line" />
+      <section className="portfolio-hero" aria-labelledby="portfolio-heading">
+        <div className="portfolio-hero__line" aria-hidden="true" />
         <div className="section-inner">
           <div className="portfolio-hero__inner">
             <div>
-              <div className="label-pill"><span className="dot" />Our Work</div>
-              <h1 className="portfolio-hero__title">
+              <div className="label-pill"><span className="dot" aria-hidden="true" />Our Work</div>
+              <h1 id="portfolio-heading" className="portfolio-hero__title">
                 EVERY PROJECT<br />
                 <span className="accent">TELLS A STORY.</span>
               </h1>
@@ -102,13 +108,19 @@ export default function Portfolio({ setPage, onRequestProduct }) {
               These are the case studies we send to clients <em>before</em> they sign. That's how confident we are.
             </p>
           </div>
+
           {/* Filter pills */}
-          <div className="portfolio-filters">
+          <div
+            className="portfolio-filters"
+            role="group"
+            aria-label="Filter projects by category"
+          >
             {cats.map(c => (
               <button
                 key={c}
                 className={`portfolio-filter ${filter === c ? "portfolio-filter--active" : ""}`}
                 onClick={() => setFilter(c)}
+                aria-pressed={filter === c}
               >{c}</button>
             ))}
           </div>
@@ -116,9 +128,15 @@ export default function Portfolio({ setPage, onRequestProduct }) {
       </section>
 
       {/* Grid */}
-      <section className="portfolio-grid-section" ref={ref}>
+      <section
+        className="portfolio-grid-section"
+        ref={ref}
+        aria-label={`${filtered.length} project${filtered.length !== 1 ? "s" : ""}${filter !== "All" ? ` in ${filter}` : ""}`}
+      >
         <div className="section-inner">
-          <div className="portfolio-count">{filtered.length} projects</div>
+          <div className="portfolio-count" aria-live="polite" aria-atomic="true">
+            {filtered.length} projects
+          </div>
           <div className="portfolio-grid">
             {filtered.map((p, i) => (
               <PortfolioCard
