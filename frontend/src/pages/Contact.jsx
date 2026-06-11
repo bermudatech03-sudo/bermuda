@@ -146,9 +146,9 @@ export default function Contact({ setPage, addToast, preselectedProduct }) {
             </p>
             <div className="contact-info">
               {[
-                { icon: "📞", l: "Phone",    v: "+91 97907 28732",         href: "tel:+919790728732" },
+                { icon: "📞", l: "Phone",    v: "+91 97907 28732 - Vishva Sen B",         href: "tel:+919790728732" },
                 { icon: "📧", l: "Email",    v: "bermudatech03@gmail.com", href: "mailto:bermudatech03@gmail.com" },
-                { icon: "📍", l: "Office",   v: "Ambattur, Chennai, Tamil Nadu, India" },
+                { icon: "📍", l: "Office",   v: "B3 - Gp homes blazing star , visalakshi nagar , vanagaram , Chennai , Tamil Nadu ,India - 600095" },
                 { icon: "⏰", l: "Response", v: "Within 4 business hours" },
               ].map((c, i) => (
                 <div key={i} className="contact-info__item">

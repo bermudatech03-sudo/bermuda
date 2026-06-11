@@ -20,7 +20,7 @@ export default function Footer({ setPage }) {
           </p>
           <div className="footer__contact-row">
             <a href="mailto:hello@bermudatech.in" className="footer__contact-link">bermudatech@gmail.com</a>
-            <a href="tel:+919876543210" className="footer__contact-link">+91 97907 28732</a>
+            <a href="tel:+919876543210" className="footer__contact-link">+91 97907 28732 - Vishva Sen B</a>
           </div>
         </div>
         <div className="footer__links-grid">
@@ -43,7 +43,7 @@ export default function Footer({ setPage }) {
           <div className="footer__col">
             <h4 className="footer__col-title">Contact</h4>
             <ul className="footer__col-list">
-              <li>Chennai, Tamil Nadu</li><li>India — 600058</li>
+              <li>B3 - Gp homes blazing star , visalakshi nagar , vanagaram , Chennai </li><li>Tamil Nadu , India — 600095</li>
               <li style={{marginTop:12}}>Service 24x7</li>
             </ul>
           </div>
